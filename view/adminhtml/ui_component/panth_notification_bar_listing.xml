@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">panth_notification_bar_listing.panth_notification_bar_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="add" class="Magento\Backend\Block\Widget\Button">
+                <url path="*/*/new"/>
+                <class>primary</class>
+                <label translate="true">Add New Bar</label>
+            </button>
+        </buttons>
+        <spinner>panth_notification_bar_columns</spinner>
+        <deps>
+            <dep>panth_notification_bar_listing.panth_notification_bar_listing_data_source</dep>
+        </deps>
+    </settings>
+
+    <dataSource name="panth_notification_bar_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">bar_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Panth_NotificationBar::manage</aclResource>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="panth_notification_bar_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>bar_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters"/>
+        <paging name="listing_paging"/>
+        <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
+            <action name="delete">
+                <settings>
+                    <confirm>
+                        <message translate="true">Are you sure you want to delete the selected notification bar(s)?</message>
+                        <title translate="true">Delete Notification Bars</title>
+                    </confirm>
+                    <url path="panth_notificationbar/bar/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                </settings>
+            </action>
+            <action name="enable">
+                <settings>
+                    <url path="panth_notificationbar/bar/massStatus">
+                        <param name="status">1</param>
+                    </url>
+                    <type>enable</type>
+                    <label translate="true">Enable</label>
+                </settings>
+            </action>
+            <action name="disable">
+                <settings>
+                    <url path="panth_notificationbar/bar/massStatus">
+                        <param name="status">0</param>
+                    </url>
+                    <type>disable</type>
+                    <label translate="true">Disable</label>
+                </settings>
+            </action>
+        </massaction>
+    </listingToolbar>
+
+    <columns name="panth_notification_bar_columns">
+        <selectionsColumn name="ids" sortOrder="0">
+            <settings>
+                <indexField>bar_id</indexField>
+            </settings>
+        </selectionsColumn>
+
+        <column name="bar_id" sortOrder="10">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+
+        <column name="name" sortOrder="20">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Name</label>
+            </settings>
+        </column>
+
+        <column name="bar_type" sortOrder="30" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <filter>select</filter>
+                <options class="Panth\NotificationBar\Model\Config\Source\BarType"/>
+                <dataType>select</dataType>
+                <label translate="true">Bar Type</label>
+            </settings>
+        </column>
+
+        <column name="position" sortOrder="40" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <filter>select</filter>
+                <options class="Panth\NotificationBar\Model\Config\Source\Position"/>
+                <dataType>select</dataType>
+                <label translate="true">Position</label>
+            </settings>
+        </column>
+
+        <column name="is_active" sortOrder="50" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <filter>select</filter>
+                <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                <dataType>select</dataType>
+                <label translate="true">Active</label>
+            </settings>
+        </column>
+
+        <column name="sort_order" sortOrder="60">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Sort Order</label>
+            </settings>
+        </column>
+
+        <column name="date_from" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date" sortOrder="70">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Date From</label>
+            </settings>
+        </column>
+
+        <column name="date_to" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date" sortOrder="80">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Date To</label>
+            </settings>
+        </column>
+
+        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date" sortOrder="90">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Created At</label>
+            </settings>
+        </column>
+
+        <actionsColumn name="actions" class="Panth\NotificationBar\Ui\Component\Listing\Column\BarActions" sortOrder="200">
+            <settings>
+                <indexField>bar_id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

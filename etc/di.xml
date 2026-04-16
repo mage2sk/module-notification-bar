@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!-- Register with Panth Core ThemeConfig -->
+    <type name="Panth\Core\ViewModel\ThemeConfig">
+        <arguments>
+            <argument name="registeredModules" xsi:type="array">
+                <item name="Panth_NotificationBar" xsi:type="string">Panth_NotificationBar</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- Grid Collections -->
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="panth_notification_bar_listing_data_source" xsi:type="string">Panth\NotificationBar\Model\ResourceModel\Bar\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- CLI Commands -->
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="panth_notificationbar_install_sample_data" xsi:type="object">Panth\NotificationBar\Console\Command\InstallSampleDataCommand</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

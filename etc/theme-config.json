@@ -1,0 +1,12 @@
+{
+  "notification-bar-info-bg": "#1E40AF",
+  "notification-bar-info-text": "#FFFFFF",
+  "notification-bar-success-bg": "#065F46",
+  "notification-bar-success-text": "#FFFFFF",
+  "notification-bar-warning-bg": "#92400E",
+  "notification-bar-warning-text": "#FFFFFF",
+  "notification-bar-promo-bg": "#0D9488",
+  "notification-bar-promo-text": "#FFFFFF",
+  "notification-bar-urgent-bg": "#DC2626",
+  "notification-bar-urgent-text": "#FFFFFF"
+}

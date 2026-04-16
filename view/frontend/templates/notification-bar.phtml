@@ -1,0 +1,311 @@
+<?php
+/**
+ * Copyright © Panth Infotech. All rights reserved.
+ *
+ * Notification Bar — works on both Hyva and Luma themes.
+ * Vanilla JS only (no jQuery, no Alpine).
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Panth\NotificationBar\ViewModel\NotificationBar $viewModel */
+$viewModel = $block->getData('view_model');
+if (!$viewModel || !$viewModel->isEnabled()) {
+    return;
+}
+$bars = $viewModel->getActiveBars();
+if (empty($bars)) {
+    return;
+}
+$escaper = $block->getEscaper();
+?>
+
+<?php /* === CSS === */ ?>
+<style>
+.panth-nbar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: var(--panth-nbar-font, inherit);
+    line-height: 1.5;
+    overflow: hidden;
+}
+.panth-nbar-pos-top_fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+.panth-nbar-pos-top_static {
+    position: relative;
+}
+.panth-nbar-pos-bottom_fixed {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+.panth-nbar-pos-bottom_floating {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.panth-nbar-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    max-width: 1280px;
+    width: 100%;
+}
+.panth-nbar-icon {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+.panth-nbar-icon svg {
+    width: 20px;
+    height: 20px;
+}
+.panth-nbar-text {
+    flex-grow: 1;
+    text-align: center;
+}
+.panth-nbar-text strong {
+    font-weight: 700;
+}
+.panth-nbar-cta {
+    display: inline-block;
+    padding: 5px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.875em;
+    white-space: nowrap;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    flex-shrink: 0;
+}
+.panth-nbar-cta:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+.panth-nbar-close {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 4px;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.panth-nbar-close:hover {
+    opacity: 1;
+}
+.panth-nbar-countdown {
+    display: inline-flex;
+    gap: 4px;
+    font-weight: 700;
+}
+.panth-nbar-cd-label {
+    font-weight: 600;
+}
+.panth-nbar-cd-unit {
+    display: inline-block;
+    min-width: 28px;
+    text-align: center;
+}
+.panth-nbar-cd-unit small {
+    font-weight: 400;
+    font-size: 0.8em;
+    opacity: 0.8;
+}
+@media (max-width: 768px) {
+    .panth-nbar {
+        font-size: 12px !important;
+        padding: 8px 36px 8px 12px !important;
+    }
+    .panth-nbar-content {
+        gap: 6px;
+    }
+    .panth-nbar-cta {
+        padding: 4px 12px;
+        font-size: 0.8em;
+    }
+    .panth-nbar-pos-bottom_floating {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+    }
+}
+<?php foreach ($bars as $bar): ?>
+<?= $viewModel->getBarCss($bar) /* @noEscape */ ?>
+<?php endforeach; ?>
+</style>
+
+<?php /* === HTML === */ ?>
+<?php foreach ($bars as $bar): ?>
+<?= $viewModel->getBarHtml($bar) /* @noEscape */ ?>
+<?php endforeach; ?>
+
+<?php /* === JavaScript — vanilla JS, no dependencies === */ ?>
+<script>
+(function() {
+    'use strict';
+
+    function setCookie(name, value, days) {
+        var expires = '';
+        if (days > 0) {
+            var d = new Date();
+            d.setTime(d.getTime() + (days * 86400000));
+            expires = '; expires=' + d.toUTCString();
+        }
+        document.cookie = name + '=' + encodeURIComponent(value) + expires + '; path=/; SameSite=Lax';
+    }
+
+    function getCookie(name) {
+        var nameEQ = name + '=';
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i].trim();
+            if (c.indexOf(nameEQ) === 0) {
+                return decodeURIComponent(c.substring(nameEQ.length));
+            }
+        }
+        return null;
+    }
+
+    function dismissBar(bar, cookieDuration, barId) {
+        bar.style.transition = 'opacity 0.3s ease, max-height 0.3s ease';
+        bar.style.opacity = '0';
+        bar.style.maxHeight = '0';
+        bar.style.overflow = 'hidden';
+        bar.style.padding = '0';
+        setTimeout(function() {
+            bar.style.display = 'none';
+        }, 300);
+        if (cookieDuration > 0) {
+            setCookie('panth_nbar_' + barId, 'dismissed', cookieDuration);
+        } else {
+            try {
+                sessionStorage.setItem('panth_nbar_' + barId, 'dismissed');
+            } catch (e) {}
+        }
+    }
+
+    function initBars() {
+        document.querySelectorAll('.panth-nbar').forEach(function(bar) {
+            var barId = bar.dataset.barId;
+            var dismissible = bar.dataset.dismissible === '1';
+            var cookieDuration = parseInt(bar.dataset.cookieDuration || '7', 10);
+            var autoClose = parseInt(bar.dataset.autoClose || '0', 10);
+            var animation = bar.dataset.animation || 'slide_down';
+
+            // Check if dismissed via cookie or session
+            if (dismissible) {
+                if (getCookie('panth_nbar_' + barId) === 'dismissed') {
+                    bar.style.display = 'none';
+                    return;
+                }
+                try {
+                    if (cookieDuration === 0 && sessionStorage.getItem('panth_nbar_' + barId) === 'dismissed') {
+                        bar.style.display = 'none';
+                        return;
+                    }
+                } catch (e) {}
+            }
+
+            // Show with animation
+            if (animation === 'slide_down') {
+                bar.style.transform = 'translateY(-100%)';
+                bar.style.transition = 'transform 0.4s ease';
+                requestAnimationFrame(function() {
+                    requestAnimationFrame(function() {
+                        bar.style.transform = 'translateY(0)';
+                    });
+                });
+            } else if (animation === 'fade_in') {
+                bar.style.opacity = '0';
+                bar.style.transition = 'opacity 0.5s ease';
+                requestAnimationFrame(function() {
+                    requestAnimationFrame(function() {
+                        bar.style.opacity = '1';
+                    });
+                });
+            }
+
+            // Close button
+            var closeBtn = bar.querySelector('.panth-nbar-close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    dismissBar(bar, cookieDuration, barId);
+                });
+            }
+
+            // CTA with # url acts as dismiss on click
+            var ctaBtn = bar.querySelector('.panth-nbar-cta[href="#"]');
+            if (ctaBtn && dismissible) {
+                ctaBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    dismissBar(bar, cookieDuration, barId);
+                });
+            }
+
+            // Auto-close
+            if (autoClose > 0) {
+                setTimeout(function() {
+                    dismissBar(bar, dismissible ? cookieDuration : -1, barId);
+                }, autoClose * 1000);
+            }
+        });
+
+        // Countdown timers
+        document.querySelectorAll('.panth-nbar-countdown').forEach(function(el) {
+            var endDate = new Date(el.dataset.endDate).getTime();
+            var expiredText = el.dataset.expiredText || 'Expired';
+
+            function update() {
+                var now = new Date().getTime();
+                var diff = endDate - now;
+                if (diff <= 0) {
+                    el.innerHTML = expiredText;
+                    return;
+                }
+                var days = Math.floor(diff / 86400000);
+                var hours = Math.floor((diff % 86400000) / 3600000);
+                var mins = Math.floor((diff % 3600000) / 60000);
+                var secs = Math.floor((diff % 60000) / 1000);
+
+                el.innerHTML = (days > 0 ? '<span class="panth-nbar-cd-unit">' + days + '<small>d</small></span> ' : '')
+                    + '<span class="panth-nbar-cd-unit">' + String(hours).padStart(2, '0') + '<small>h</small></span> '
+                    + '<span class="panth-nbar-cd-unit">' + String(mins).padStart(2, '0') + '<small>m</small></span> '
+                    + '<span class="panth-nbar-cd-unit">' + String(secs).padStart(2, '0') + '<small>s</small></span>';
+            }
+            update();
+            setInterval(update, 1000);
+        });
+    }
+
+    // Run on DOM ready — works on both Hyva and Luma
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initBars);
+    } else {
+        initBars();
+    }
+})();
+</script>

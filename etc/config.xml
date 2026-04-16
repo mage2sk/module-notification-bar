@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <panth_notification_bar>
+            <general>
+                <enabled>1</enabled>
+                <max_visible_bars>3</max_visible_bars>
+            </general>
+            <display>
+                <default_position>top_fixed</default_position>
+                <stack_bars>1</stack_bars>
+                <animation>slide_down</animation>
+                <z_index>9999</z_index>
+            </display>
+        </panth_notification_bar>
+    </default>
+</config>

@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">panth_notification_bar_form.panth_notification_bar_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Notification Bar</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="back" class="Magento\Backend\Block\Widget\Button">
+                <url path="*/*/"/>
+                <class>back</class>
+                <label translate="true">Back</label>
+            </button>
+            <button name="delete" class="Panth\NotificationBar\Block\Adminhtml\Bar\Edit\DeleteButton"/>
+            <button name="save" class="Panth\NotificationBar\Block\Adminhtml\Bar\Edit\SaveButton"/>
+            <button name="save_and_continue" class="Panth\NotificationBar\Block\Adminhtml\Bar\Edit\SaveAndContinueButton"/>
+        </buttons>
+        <namespace>panth_notification_bar_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>panth_notification_bar_form.panth_notification_bar_form_data_source</dep>
+        </deps>
+    </settings>
+
+    <dataSource name="panth_notification_bar_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="panth_notificationbar/bar/save"/>
+        </settings>
+        <dataProvider class="Panth\NotificationBar\Model\Bar\DataProvider" name="panth_notification_bar_form_data_source">
+            <settings>
+                <requestFieldName>bar_id</requestFieldName>
+                <primaryFieldName>bar_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <!-- General -->
+    <fieldset name="general" sortOrder="10">
+        <settings>
+            <collapsible>true</collapsible>
+            <opened>true</opened>
+            <label translate="true">General</label>
+        </settings>
+
+        <field name="name" formElement="input" sortOrder="10">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Name</label>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+
+        <field name="is_active" formElement="select" sortOrder="20">
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Active</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+
+        <field name="bar_type" formElement="select" sortOrder="30">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Bar Type</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Panth\NotificationBar\Model\Config\Source\BarType"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+
+        <field name="sort_order" formElement="input" sortOrder="40">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Sort Order</label>
+                <validation>
+                    <rule name="validate-digits" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+
+        <field name="position" formElement="select" sortOrder="50">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Position</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Panth\NotificationBar\Model\Config\Source\Position"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+    </fieldset>
+
+    <!-- Content & Appearance -->
+    <fieldset name="content" sortOrder="20">
+        <settings>
+            <collapsible>true</collapsible>
+            <opened>true</opened>
+            <label translate="true">Content &amp; Appearance</label>
+        </settings>
+
+        <field name="content" formElement="textarea" sortOrder="10">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Content</label>
+                <notice translate="true">Supports HTML. Use {countdown} placeholder to insert countdown timer.</notice>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+
+        <field name="mobile_content" formElement="textarea" sortOrder="20">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Mobile Content</label>
+                <notice translate="true">Optional shorter content for mobile. Leave empty to use main content.</notice>
+            </settings>
+        </field>
+
+        <field name="background_type" formElement="select" sortOrder="30">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Background Type</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options>
+                            <option name="color" xsi:type="array">
+                                <item name="value" xsi:type="string">color</item>
+                                <item name="label" xsi:type="string" translate="true">Color</item>
+                            </option>
+                            <option name="gradient" xsi:type="array">
+                                <item name="value" xsi:type="string">gradient</item>
+                                <item name="label" xsi:type="string" translate="true">Gradient</item>
+                            </option>
+                            <option name="image" xsi:type="array">
+                                <item name="value" xsi:type="string">image</item>
+                                <item name="label" xsi:type="string" translate="true">Image</item>
+                            </option>
+                        </options>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+
+        <field name="background_color" formElement="input" sortOrder="40">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Background Color</label>
+                <notice translate="true">Hex color, e.g., #1F2937</notice>
+            </settings>
+        </field>
+
+        <field name="background_gradient" formElement="input" sortOrder="50">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Background Gradient</label>
+                <notice translate="true">CSS gradient, e.g., linear-gradient(90deg, #1F2937, #0D9488)</notice>
+            </settings>
+        </field>
+
+        <field name="text_color" formElement="input" sortOrder="60">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="string">#FFFFFF</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Text Color</label>
+            </settings>
+        </field>
+
+        <field name="font_size" formElement="input" sortOrder="70">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="string">14</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Font Size (px)</label>
+                <validation>
+                    <rule name="validate-digits" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+
+        <field name="bar_padding" formElement="input" sortOrder="80">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="string">10px 20px</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Bar Padding</label>
+            </settings>
+        </field>
+
+        <field name="icon" formElement="input" sortOrder="90">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Icon</label>
+                <notice translate="true">Built-in icons: info, warning, success, promo, star, bell, gift, truck, percent, clock. Leave empty for no icon.</notice>
+            </settings>
+        </field>
+
+        <field name="animation" formElement="select" sortOrder="100">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Animation</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Panth\NotificationBar\Model\Config\Source\Animation"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+
+        <field name="custom_css" formElement="textarea" sortOrder="110">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Custom CSS</label>
+                <notice translate="true">Custom CSS applied to this bar only.</notice>
+            </settings>
+        </field>
+    </fieldset>
+
+    <!-- Call to Action Button -->
+    <fieldset name="cta" sortOrder="30">
+        <settings>
+            <collapsible>true</collapsible>
+            <opened>false</opened>
+            <label translate="true">Call to Action Button</label>
+        </settings>
+
+        <field name="cta_enabled" formElement="select" sortOrder="10">
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Enable CTA Button</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+
+        <field name="cta_text" formElement="input" sortOrder="20">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Button Text</label>
+            </settings>
+        </field>
+
+        <field name="cta_url" formElement="input" sortOrder="30">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Button URL</label>
+            </settings>
+        </field>
+
+        <field name="cta_open_new_tab" formElement="select" sortOrder="40">
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Open in New Tab</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+
+        <field name="cta_bg_color" formElement="input" sortOrder="50">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="string">#FFFFFF</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Button Background Color</label>
+            </settings>
+        </field>
+
+        <field name="cta_text_color" formElement="input" sortOrder="60">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="string">#1F2937</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Button Text Color</label>
+            </settings>
+        </field>
+    </fieldset>
+
+    <!-- Countdown Timer -->
+    <fieldset name="countdown" sortOrder="40">
+        <settings>
+            <collapsible>true</collapsible>
+            <opened>false</opened>
+            <label translate="true">Countdown Timer</label>
+        </settings>
+
+        <field name="countdown_enabled" formElement="select" sortOrder="10">
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Enable Countdown</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+
+        <field name="countdown_end_date" formElement="date" sortOrder="20">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Countdown End Date</label>
+            </settings>
+            <formElements>
+                <date>
+                    <settings>
+                        <options>
+                            <option name="showsTime" xsi:type="boolean">true</option>
+                        </options>
+                    </settings>
+                </date>
+            </formElements>
+        </field>
+
+        <field name="countdown_label" formElement="input" sortOrder="30">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Countdown Label</label>
+                <notice translate="true">Text before countdown, e.g., 'Sale ends in:'</notice>
+            </settings>
+        </field>
+
+        <field name="countdown_expired_text" formElement="input" sortOrder="40">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Countdown Expired Text</label>
+                <notice translate="true">Text shown after countdown expires.</notice>
+            </settings>
+        </field>
+    </fieldset>
+
+    <!-- Targeting & Schedule -->
+    <fieldset name="targeting" sortOrder="50">
+        <settings>
+            <collapsible>true</collapsible>
+            <opened>false</opened>
+            <label translate="true">Targeting &amp; Schedule</label>
+        </settings>
+
+        <field name="store_ids" formElement="multiselect" sortOrder="10">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Store Views</label>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="Magento\Cms\Ui\Component\Listing\Column\Cms\Options"/>
+                    </settings>
+                </multiselect>
+            </formElements>
+        </field>
+
+        <field name="customer_groups" formElement="multiselect" sortOrder="20">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Customer Groups</label>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="Panth\NotificationBar\Model\Config\Source\CustomerGroups"/>
+                    </settings>
+                </multiselect>
+            </formElements>
+        </field>
+
+        <field name="date_from" formElement="date" sortOrder="30">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">From Date</label>
+            </settings>
+        </field>
+
+        <field name="date_to" formElement="date" sortOrder="40">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">To Date</label>
+            </settings>
+        </field>
+
+        <field name="page_targeting" formElement="select" sortOrder="50">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Page Targeting</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Panth\NotificationBar\Model\Config\Source\PageTargeting"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+
+        <field name="target_page_types" formElement="multiselect" sortOrder="60">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Target Page Types</label>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="Panth\NotificationBar\Model\Config\Source\PageTypes"/>
+                    </settings>
+                </multiselect>
+            </formElements>
+        </field>
+
+        <field name="target_urls" formElement="textarea" sortOrder="70">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Target URLs</label>
+                <notice translate="true">One URL pattern per line. Supports * wildcard. E.g., /sale/*, /category/*.html</notice>
+            </settings>
+        </field>
+
+        <field name="target_countries" formElement="multiselect" sortOrder="80">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Target Countries</label>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="Panth\NotificationBar\Model\Config\Source\Countries"/>
+                    </settings>
+                </multiselect>
+            </formElements>
+        </field>
+
+        <field name="target_url_params" formElement="textarea" sortOrder="90">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Target URL Parameters</label>
+                <notice translate="true">URL parameters to match. One per line. Format: key=value</notice>
+            </settings>
+        </field>
+    </fieldset>
+
+    <!-- Dismissal & Auto-close -->
+    <fieldset name="dismissal" sortOrder="60">
+        <settings>
+            <collapsible>true</collapsible>
+            <opened>false</opened>
+            <label translate="true">Dismissal &amp; Auto-close</label>
+        </settings>
+
+        <field name="is_dismissible" formElement="select" sortOrder="10">
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Is Dismissible</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+
+        <field name="cookie_duration" formElement="input" sortOrder="20">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Cookie Duration (Days)</label>
+                <notice translate="true">Days to remember dismissal. 0 = session only (reappears on next visit).</notice>
+                <validation>
+                    <rule name="validate-digits" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+
+        <field name="auto_close_seconds" formElement="input" sortOrder="30">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Auto-close After (Seconds)</label>
+                <notice translate="true">Auto-close after X seconds. 0 = never.</notice>
+                <validation>
+                    <rule name="validate-digits" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+
+        <field name="show_on_mobile" formElement="select" sortOrder="40">
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Show on Mobile</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+
+        <field name="show_on_desktop" formElement="select" sortOrder="50">
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Show on Desktop</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+    </fieldset>
+</form>

@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="panth" translate="label" sortOrder="100">
+            <label>Panth Extensions</label>
+        </tab>
+
+        <section id="panth_notification_bar" translate="label" type="text" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Notification Bar</label>
+            <tab>panth</tab>
+            <resource>Panth_NotificationBar::config</resource>
+
+            <!-- General Settings -->
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General Settings</label>
+
+                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Notification Bar</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable or disable the notification bar functionality.</comment>
+                </field>
+
+                <field id="max_visible_bars" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Max Visible Bars</label>
+                    <validate>validate-digits</validate>
+                    <comment>Maximum number of notification bars to display simultaneously.</comment>
+                </field>
+            </group>
+
+            <!-- Display Settings -->
+            <group id="display" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Display Settings</label>
+
+                <field id="default_position" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Default Position</label>
+                    <source_model>Panth\NotificationBar\Model\Config\Source\Position</source_model>
+                </field>
+
+                <field id="stack_bars" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Stack Multiple Bars</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>When enabled, multiple bars will stack vertically. When disabled, only the highest priority bar is shown.</comment>
+                </field>
+
+                <field id="animation" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Default Animation</label>
+                    <source_model>Panth\NotificationBar\Model\Config\Source\Animation</source_model>
+                </field>
+
+                <field id="z_index" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Z-Index</label>
+                    <validate>validate-digits</validate>
+                    <comment>CSS z-index value for the notification bar container.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

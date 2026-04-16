@@ -1,0 +1,22 @@
+{
+    "name": "mage2kishan/module-notification-bar",
+    "description": "Panth Notification Bar — display customizable notification bars, promo banners, countdown timers, and announcement strips on your Magento 2 storefront. Multiple bars with scheduling, page targeting, customer group targeting, geo-targeting, CTA buttons, and dismissible with cookie memory. Hyva + Luma compatible.",
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "license": "proprietary",
+    "keywords": ["magento2", "magento2-module", "panth", "notification-bar", "promo-bar", "announcement", "countdown-timer", "sticky-bar"],
+    "homepage": "https://kishansavaliya.com",
+    "support": {"email": "kishansavaliyakb@gmail.com", "source": "https://kishansavaliya.com"},
+    "authors": [{"name": "Kishan Savaliya", "email": "kishansavaliyakb@gmail.com", "homepage": "https://kishansavaliya.com", "role": "Developer"}],
+    "require": {
+        "php": "~8.1.0||~8.2.0||~8.3.0||~8.4.0",
+        "magento/framework": "^103.0",
+        "magento/module-store": "^101.1",
+        "magento/module-cms": "^104.0",
+        "magento/module-customer": "^103.0",
+        "magento/module-backend": "^102.0",
+        "magento/module-ui": "^101.2",
+        "mage2kishan/module-core": "^1.0"
+    },
+    "autoload": {"files": ["registration.php"], "psr-4": {"Panth\\NotificationBar\\": ""}}
+}
