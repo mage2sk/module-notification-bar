@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.4] - 2026-05-15
+
+### Fixed
+- `getCookie()` in `view/frontend/templates/notification-bar.phtml` rewritten to use a single-capture regex with a non-capturing prefix group, so the dismissal check correctly reads the cookie value. Dismissed bars now stay hidden across pageviews when `cookie_duration > 0`.
+
 ## [1.0.1] - 2026-04-21
 
 ### Added
