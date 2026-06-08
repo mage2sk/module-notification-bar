@@ -2,7 +2,7 @@
 /**
  * Copyright © Panth Infotech. All rights reserved.
  *
- * Notification Bar — works on both Hyva and Luma themes.
+ * Notification Bar - works on both Hyva and Luma themes.
  * Vanilla JS only (no jQuery, no Alpine).
  */
 declare(strict_types=1);
@@ -162,7 +162,7 @@ $escaper = $block->getEscaper();
 <?= $viewModel->getBarHtml($bar) /* @noEscape */ ?>
 <?php endforeach; ?>
 
-<?php /* === JavaScript — vanilla JS, no dependencies === */ ?>
+<?php /* === JavaScript - vanilla JS, no dependencies === */ ?>
 <script>
 (function() {
     'use strict';
@@ -294,7 +294,7 @@ $escaper = $block->getEscaper();
         });
     }
 
-    // Run on DOM ready — works on both Hyva and Luma
+    // Run on DOM ready - works on both Hyva and Luma
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initBars);
     } else {
