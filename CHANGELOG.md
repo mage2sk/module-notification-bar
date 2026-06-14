@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.6] - 2026-06-14
+
+### Fixed
+- PHP 8.4 / Magento 2.4.9 compatibility: made the grid collection signatures in `Model/ResourceModel/Bar/Grid/Collection.php` explicitly nullable (`?AdapterInterface $connection`, `?AbstractDb $resource`, `?SearchCriteriaInterface $searchCriteria`, `?array $items`). PHP 8.4 deprecates implicit-nullable parameters and Magento's compiler promotes that to an error, which broke `setup:di:compile`. Behaviour is unchanged.
+
 ## [1.0.4] - 2026-05-15
 
 ### Fixed
