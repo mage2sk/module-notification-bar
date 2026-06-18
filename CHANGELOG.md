@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.7] - 2026-06-18
+
+### Changed
+- Rewrote README to match the Panth module standard: added Quick Answer block, Who Is It For section, How It Works section, expanded FAQ, Quick Links table, SEO keywords, and updated canonical URL to the live product page.
+
 ## [1.0.6] - 2026-06-14
 
 ### Fixed
