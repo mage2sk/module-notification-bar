@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Panth\NotificationBar\Model\ResourceModel\Bar;
@@ -10,24 +9,13 @@ use Panth\NotificationBar\Model\ResourceModel\Bar as BarResource;
 
 class Collection extends AbstractCollection
 {
-    /**
-     * @var string
-     */
     protected $_idFieldName = 'bar_id';
 
-    /**
-     * @inheritdoc
-     */
     protected function _construct(): void
     {
         $this->_init(BarModel::class, BarResource::class);
     }
 
-    /**
-     * Add active filter with date range validation
-     *
-     * @return $this
-     */
     public function addActiveFilter(): self
     {
         $now = (new \DateTime())->format('Y-m-d H:i:s');
@@ -51,12 +39,6 @@ class Collection extends AbstractCollection
         return $this;
     }
 
-    /**
-     * Add store filter
-     *
-     * @param int $storeId
-     * @return $this
-     */
     public function addStoreFilter(int $storeId): self
     {
         $this->addFieldToFilter(
@@ -70,12 +52,6 @@ class Collection extends AbstractCollection
         return $this;
     }
 
-    /**
-     * Add position filter
-     *
-     * @param string $position
-     * @return $this
-     */
     public function addPositionFilter(string $position): self
     {
         $this->addFieldToFilter('position', $position);

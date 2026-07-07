@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Panth\NotificationBar\Controller\Adminhtml\Bar;
@@ -15,21 +14,10 @@ class Delete extends Action implements HttpPostActionInterface
 {
     const ADMIN_RESOURCE = 'Panth_NotificationBar::manage';
 
-    /**
-     * @var BarFactory
-     */
     private BarFactory $barFactory;
 
-    /**
-     * @var BarResource
-     */
     private BarResource $barResource;
 
-    /**
-     * @param Context $context
-     * @param BarFactory $barFactory
-     * @param BarResource $barResource
-     */
     public function __construct(
         Context $context,
         BarFactory $barFactory,
@@ -40,11 +28,6 @@ class Delete extends Action implements HttpPostActionInterface
         $this->barResource = $barResource;
     }
 
-    /**
-     * Delete notification bar
-     *
-     * @return \Magento\Framework\Controller\Result\Redirect
-     */
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();

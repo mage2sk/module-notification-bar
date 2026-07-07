@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Panth\NotificationBar\Controller\Adminhtml\Bar;
@@ -15,27 +14,12 @@ class Edit extends Action implements HttpGetActionInterface
 {
     const ADMIN_RESOURCE = 'Panth_NotificationBar::manage';
 
-    /**
-     * @var PageFactory
-     */
     private PageFactory $resultPageFactory;
 
-    /**
-     * @var BarFactory
-     */
     private BarFactory $barFactory;
 
-    /**
-     * @var BarResource
-     */
     private BarResource $barResource;
 
-    /**
-     * @param Context $context
-     * @param PageFactory $resultPageFactory
-     * @param BarFactory $barFactory
-     * @param BarResource $barResource
-     */
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory,
@@ -48,11 +32,6 @@ class Edit extends Action implements HttpGetActionInterface
         $this->barResource = $barResource;
     }
 
-    /**
-     * Edit or create notification bar page
-     *
-     * @return \Magento\Framework\View\Result\Page|\Magento\Framework\Controller\Result\Redirect
-     */
     public function execute()
     {
         $barId = (int)$this->getRequest()->getParam('bar_id');

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Panth\NotificationBar\Controller\Adminhtml\Bar;
@@ -16,27 +15,12 @@ class MassStatus extends Action implements HttpPostActionInterface
 {
     const ADMIN_RESOURCE = 'Panth_NotificationBar::manage';
 
-    /**
-     * @var Filter
-     */
     private Filter $filter;
 
-    /**
-     * @var CollectionFactory
-     */
     private CollectionFactory $collectionFactory;
 
-    /**
-     * @var BarResource
-     */
     private BarResource $barResource;
 
-    /**
-     * @param Context $context
-     * @param Filter $filter
-     * @param CollectionFactory $collectionFactory
-     * @param BarResource $barResource
-     */
     public function __construct(
         Context $context,
         Filter $filter,
@@ -49,11 +33,6 @@ class MassStatus extends Action implements HttpPostActionInterface
         $this->barResource = $barResource;
     }
 
-    /**
-     * Mass update status for notification bars
-     *
-     * @return \Magento\Framework\Controller\Result\Redirect
-     */
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();

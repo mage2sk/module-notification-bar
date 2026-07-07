@@ -1,7 +1,4 @@
 <?php
-/**
- * Copyright © Panth Infotech. All rights reserved.
- */
 declare(strict_types=1);
 
 namespace Panth\NotificationBar\ViewModel;
@@ -75,13 +72,11 @@ class NotificationBar implements ArgumentInterface
         foreach ($collection as $bar) {
             $barData = $bar->getData();
 
-            // Store filter
             $storeIds = $this->parseCommaSeparated($barData['store_ids'] ?? '');
             if (!empty($storeIds) && !in_array(0, $storeIds) && !in_array($storeId, $storeIds)) {
                 continue;
             }
 
-            // Device filter
             if ($isMobile && empty($barData['show_on_mobile'])) {
                 continue;
             }
@@ -89,18 +84,15 @@ class NotificationBar implements ArgumentInterface
                 continue;
             }
 
-            // Customer group filter
             $groups = $this->parseCommaSeparated($barData['customer_groups'] ?? '');
             if (!empty($groups) && !in_array($customerGroupId, $groups)) {
                 continue;
             }
 
-            // Page targeting filter
             if (!$this->matchesCurrentPage($barData)) {
                 continue;
             }
 
-            // Use mobile content if available and on mobile
             if ($isMobile && !empty($barData['mobile_content'])) {
                 $barData['content'] = $barData['mobile_content'];
             }
@@ -129,10 +121,8 @@ class NotificationBar implements ArgumentInterface
         $padding = $bar['bar_padding'] ?? '10px 20px';
         $zIndex = $this->getZIndex();
 
-        // Background
         $bgStyle = $this->getBackgroundStyle($bar);
 
-        // Height
         $heightStyle = '';
         $barHeight = (int) ($bar['bar_height'] ?? 0);
         if ($barHeight > 0) {
@@ -154,7 +144,6 @@ class NotificationBar implements ArgumentInterface
 
         $html .= '<div class="panth-nbar-content">';
 
-        // Icon
         $icon = $bar['icon'] ?? '';
         if ($icon !== '' && $icon !== null) {
             $svg = $this->getBuiltInIcon($icon);
@@ -163,10 +152,8 @@ class NotificationBar implements ArgumentInterface
             }
         }
 
-        // Text content
         $content = $bar['content'] ?? '';
 
-        // Countdown replacement
         if (!empty($bar['countdown_enabled']) && !empty($bar['countdown_end_date'])) {
             $label = $bar['countdown_label'] ?? '';
             $expiredText = $bar['countdown_expired_text'] ?? 'Expired';
@@ -184,7 +171,6 @@ class NotificationBar implements ArgumentInterface
 
         $html .= '<span class="panth-nbar-text">' . $content . '</span>';
 
-        // CTA button
         if (!empty($bar['cta_enabled']) && !empty($bar['cta_text'])) {
             $ctaUrl = $bar['cta_url'] ?? '#';
             $ctaBg = $bar['cta_bg_color'] ?? '#FFFFFF';
@@ -201,7 +187,6 @@ class NotificationBar implements ArgumentInterface
 
         $html .= '</div>';
 
-        // Close button
         if (!empty($bar['is_dismissible'])) {
             $html .= '<button type="button" class="panth-nbar-close" aria-label="Close">'
                 . '<svg width="14" height="14" viewBox="0 0 14 14" fill="none">'
@@ -219,7 +204,6 @@ class NotificationBar implements ArgumentInterface
         $barId = (int) ($bar['bar_id'] ?? 0);
         $css = '';
 
-        // Custom CSS
         $customCss = $bar['custom_css'] ?? '';
         if ($customCss !== '') {
             $css .= '.panth-nbar[data-bar-id="' . $barId . '"] { ' . $customCss . ' }' . "\n";
@@ -245,7 +229,6 @@ class NotificationBar implements ArgumentInterface
 
         $matches = false;
 
-        // Check target page types
         $pageTypes = $this->parseCommaSeparatedString($bar['target_page_types'] ?? '');
         if (!empty($pageTypes)) {
             foreach ($pageTypes as $pageType) {
@@ -285,7 +268,6 @@ class NotificationBar implements ArgumentInterface
             }
         }
 
-        // Check target URLs (pattern matching)
         if (!$matches) {
             $targetUrls = $this->parseCommaSeparatedString($bar['target_urls'] ?? '');
             if (!empty($targetUrls)) {
@@ -294,7 +276,7 @@ class NotificationBar implements ArgumentInterface
                     if ($pattern === '') {
                         continue;
                     }
-                    // Convert * wildcard to regex
+
                     $regex = '#^' . str_replace('\*', '.*', preg_quote($pattern, '#')) . '$#i';
                     if (preg_match($regex, $currentPath)) {
                         $matches = true;
@@ -304,7 +286,6 @@ class NotificationBar implements ArgumentInterface
             }
         }
 
-        // Check URL params
         if (!$matches && !empty($bar['target_url_params'])) {
             $params = $this->parseCommaSeparatedString($bar['target_url_params']);
             $currentParams = $this->request->getParams();
@@ -325,7 +306,6 @@ class NotificationBar implements ArgumentInterface
             }
         }
 
-        // If no page types and no target urls specified, treat as match for 'specific'
         $pageTypes = $this->parseCommaSeparatedString($bar['target_page_types'] ?? '');
         $targetUrls = $this->parseCommaSeparatedString($bar['target_urls'] ?? '');
         $targetParams = $this->parseCommaSeparatedString($bar['target_url_params'] ?? '');
@@ -403,9 +383,6 @@ class NotificationBar implements ArgumentInterface
         );
     }
 
-    /**
-     * @return int[]
-     */
     private function parseCommaSeparated(?string $value): array
     {
         if ($value === null || trim($value) === '') {
@@ -416,9 +393,6 @@ class NotificationBar implements ArgumentInterface
         }));
     }
 
-    /**
-     * @return string[]
-     */
     private function parseCommaSeparatedString(?string $value): array
     {
         if ($value === null || trim($value) === '') {

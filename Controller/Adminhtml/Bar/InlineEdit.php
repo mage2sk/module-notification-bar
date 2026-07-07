@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Panth\NotificationBar\Controller\Adminhtml\Bar;
@@ -16,27 +15,12 @@ class InlineEdit extends Action implements HttpPostActionInterface
 {
     const ADMIN_RESOURCE = 'Panth_NotificationBar::manage';
 
-    /**
-     * @var BarFactory
-     */
     private BarFactory $barFactory;
 
-    /**
-     * @var BarResource
-     */
     private BarResource $barResource;
 
-    /**
-     * @var JsonFactory
-     */
     private JsonFactory $jsonFactory;
 
-    /**
-     * @param Context $context
-     * @param BarFactory $barFactory
-     * @param BarResource $barResource
-     * @param JsonFactory $jsonFactory
-     */
     public function __construct(
         Context $context,
         BarFactory $barFactory,
@@ -49,11 +33,6 @@ class InlineEdit extends Action implements HttpPostActionInterface
         $this->jsonFactory = $jsonFactory;
     }
 
-    /**
-     * Process inline edit
-     *
-     * @return \Magento\Framework\Controller\Result\Json
-     */
     public function execute()
     {
         $resultJson = $this->jsonFactory->create();

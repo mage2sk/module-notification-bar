@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Panth\NotificationBar\Model\Config\Source;
@@ -8,9 +7,6 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 class BarType implements OptionSourceInterface
 {
-    /**
-     * @inheritdoc
-     */
     public function toOptionArray(): array
     {
         return [

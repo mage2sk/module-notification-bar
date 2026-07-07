@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Panth\NotificationBar\Block\Adminhtml\Bar\Edit;
@@ -8,11 +7,6 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 class SaveAndContinueButton extends GenericButton implements ButtonProviderInterface
 {
-    /**
-     * Get button data
-     *
-     * @return array
-     */
     public function getButtonData(): array
     {
         return [
