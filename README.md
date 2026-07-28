@@ -229,14 +229,14 @@ bin/magento module:status Panth_NotificationBar
 
 After install, open:
 ```
-Admin → Panth Infotech → Notification Bar → Manage Bars
+Admin -> Panth Infotech -> Notification Bar -> Manage Bars
 ```
 
 ---
 
 ## Configuration
 
-Go to **Stores → Configuration → Panth Extensions → Notification Bar**.
+Go to **Stores -> Configuration -> Panth Extensions -> Notification Bar**.
 
 | Setting | Group | Default | Description |
 |---|---|---|---|
@@ -247,7 +247,7 @@ Go to **Stores → Configuration → Panth Extensions → Notification Bar**.
 | Default Animation | Display Settings | slide_down | Animation applied to new bars: `slide_down`, `fade_in`, or `none`. |
 | Z-Index | Display Settings | 9999 | CSS z-index for the bar container. Raise this if a theme header overlaps the bar. |
 
-Per-bar options (content, colors, countdown, targeting, scheduling, dismissal) are set on each bar's edit page under **Panth Infotech → Notification Bar → Manage Bars**.
+Per-bar options (content, colors, countdown, targeting, scheduling, dismissal) are set on each bar's edit page under **Panth Infotech -> Notification Bar -> Manage Bars**.
 
 ---
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.9]
+
+### Changed
+- Replaced typographic characters (em dashes, curly quotes, ellipsis) with plain ASCII punctuation. No functional changes.
+
 ## [1.0.8]
 
 ### Changed
@@ -49,11 +54,11 @@
 - Page type targeting (layout handles)
 - URL parameter targeting (`key=value` pairs for UTM / campaign filtering)
 - Device targeting: show on mobile / desktop independently
-- Global configuration section under **Panth Extensions → Notification Bar**
-- Unified admin menu entry under **Panth Infotech → Notification Bar**
+- Global configuration section under **Panth Extensions -> Notification Bar**
+- Unified admin menu entry under **Panth Infotech -> Notification Bar**
 - Hyva theme support (Alpine.js template)
 - Luma theme support (vanilla JS template)
 - Automatic theme detection via `Panth\Core\Helper\Theme`
-- `ifconfig`-gated block — no build cost when the module is disabled
+- `ifconfig`-gated block - no build cost when the module is disabled
 - Single indexed database table (`panth_notification_bar`) with indexes on `is_active`, `sort_order`, `position`, `date_from`, `date_to`, `bar_type`
 - ACL resources for granular admin permissions (`Panth_NotificationBar::manage`, `Panth_NotificationBar::config`)
