@@ -1,0 +1,464 @@
+<?php
+/**
+ * Copyright © Panth Infotech. All rights reserved.
+ *
+ * Notification Bar - works on both Hyva and Luma themes.
+ * Vanilla JS only (no jQuery, no Alpine).
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Panth\NotificationBar\ViewModel\NotificationBar $viewModel */
+$viewModel = $block->getData('view_model');
+if (!$viewModel || !$viewModel->isEnabled()) {
+    return;
+}
+$bars = $viewModel->getActiveBars();
+if (empty($bars)) {
+    return;
+}
+$escaper = $block->getEscaper();
+?>
+
+<?php /* === CSS === */ ?>
+<style>
+.panth-nbar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: var(--panth-nbar-font, inherit);
+    line-height: 1.5;
+    overflow: hidden;
+}
+.panth-nbar-pos-top_fixed {
+    position: fixed;
+    max-width: 100vw;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+.panth-nbar-pos-top_static {
+    position: relative;
+}
+.panth-nbar-pos-bottom_fixed {
+    position: fixed;
+    max-width: 100vw;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+body.checkout-index-index .panth-nbar-pos-bottom_fixed,
+body.checkout-index-index .panth-nbar-pos-bottom_floating,
+body[class*="multishipping-checkout"] .panth-nbar-pos-bottom_fixed,
+body[class*="multishipping-checkout"] .panth-nbar-pos-bottom_floating {
+    display: none !important;
+}
+html.panth-overlay-open :is(.panth-nbar-pos-bottom_fixed, .panth-nbar-pos-bottom_floating),
+html.nav-open :is(.panth-nbar-pos-bottom_fixed, .panth-nbar-pos-bottom_floating),
+html:has(.pmenu-mobile-drawer.is-open) :is(.panth-nbar-pos-bottom_fixed, .panth-nbar-pos-bottom_floating),
+html:has(.qv-overlay.active) :is(.panth-nbar-pos-bottom_fixed, .panth-nbar-pos-bottom_floating),
+html:has(.modals-wrapper ._show) :is(.panth-nbar-pos-bottom_fixed, .panth-nbar-pos-bottom_floating),
+html:has(.minicart-wrapper.active) :is(.panth-nbar-pos-bottom_fixed, .panth-nbar-pos-bottom_floating),
+html:has(.panth-euw-modal.is-open) :is(.panth-nbar-pos-bottom_fixed, .panth-nbar-pos-bottom_floating),
+html:has([role="dialog"][aria-modal="true"][x-show]:not([x-cloak]):not([style*="display: none"])) :is(.panth-nbar-pos-bottom_fixed, .panth-nbar-pos-bottom_floating) {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+html.panth-has-bottom-bar body {
+    padding-bottom: var(--panth-bottom-bar-offset, 0px);
+}
+html.panth-has-top-bar body {
+    padding-top: var(--panth-top-bar-offset, 0px);
+}
+.panth-nbar-pos-bottom_floating {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    width: auto;
+    max-width: calc(100vw - 40px);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.panth-nbar-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    max-width: 1280px;
+    width: 100%;
+}
+.panth-nbar-icon {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+.panth-nbar-icon svg {
+    width: 20px;
+    height: 20px;
+}
+.panth-nbar-text {
+    flex-grow: 1;
+    text-align: center;
+}
+.panth-nbar-text strong {
+    font-weight: 700;
+}
+.panth-nbar-cta {
+    display: inline-block;
+    padding: 5px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.875em;
+    white-space: nowrap;
+    box-sizing: border-box;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    flex-shrink: 0;
+}
+.panth-nbar-cta:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+.panth-nbar-close {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+    width: 44px;
+    height: 44px;
+    max-height: 100%;
+    border-radius: 4px;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.panth-nbar-close:hover {
+    opacity: 1;
+}
+.panth-nbar .panth-nbar-close {
+    border-radius: 4px !important;
+}
+.panth-nbar .panth-nbar-close:focus-visible,
+.panth-nbar .panth-nbar-cta:focus-visible {
+    outline: 2px solid #ffffff !important;
+    outline-offset: 0;
+    box-shadow: 0 0 0 4px #111827 !important;
+    opacity: 1;
+}
+.panth-nbar-countdown {
+    display: inline-flex;
+    gap: 4px;
+    font-weight: 700;
+}
+.panth-nbar-cd-label {
+    font-weight: 600;
+}
+.panth-nbar-cd-unit {
+    display: inline-block;
+    min-width: 28px;
+    text-align: center;
+}
+.panth-nbar-cd-unit small {
+    font-weight: 400;
+    font-size: max(12px, 0.8em);
+    opacity: 0.8;
+}
+@media (min-width: 769px) {
+    .panth-nbar:has(> .panth-nbar-close) > .panth-nbar-content {
+        padding: 0 48px;
+        box-sizing: border-box;
+    }
+}
+@media (max-width: 768px) {
+    .panth-nbar {
+        padding: 8px 48px 8px 12px !important;
+        min-height: 40px;
+    }
+    .panth-nbar-content {
+        gap: 6px 8px;
+    }
+    .panth-nbar-cta {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 6px 14px;
+        font-size: 13px;
+    }
+    .panth-nbar-close {
+        right: 2px;
+        top: 0;
+        bottom: 0;
+        transform: none;
+        min-width: 44px;
+        min-height: 40px;
+        height: 100%;
+    }
+    .panth-nbar-pos-bottom_floating {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        max-width: calc(100vw - 20px);
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .panth-nbar,
+    .panth-nbar * {
+        transition: none !important;
+    }
+    .panth-nbar-cta:hover {
+        transform: none;
+    }
+}
+<?php foreach ($bars as $bar): ?>
+<?= $viewModel->getBarCss($bar) /* @noEscape */ ?>
+<?php endforeach; ?>
+</style>
+
+<?php /* === HTML === */ ?>
+<?php foreach ($bars as $bar): ?>
+<?= $viewModel->getBarHtml($bar) /* @noEscape */ ?>
+<?php endforeach; ?>
+
+<?php /* === JavaScript - vanilla JS, no dependencies === */ ?>
+<script>
+(function() {
+    'use strict';
+
+    function setCookie(name, value, days) {
+        var expires = '';
+        if (days > 0) {
+            var d = new Date();
+            d.setTime(d.getTime() + (days * 86400000));
+            expires = '; expires=' + d.toUTCString();
+        }
+        document.cookie = name + '=' + encodeURIComponent(value) + expires + '; path=/; SameSite=Lax';
+    }
+
+    function getCookie(name) {
+        var match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+        return match ? decodeURIComponent(match[1]) : null;
+    }
+
+    function dismissBar(bar, cookieDuration, barId) {
+        bar.style.transition = 'opacity 0.3s ease, max-height 0.3s ease';
+        bar.style.opacity = '0';
+        bar.style.maxHeight = '0';
+        bar.style.overflow = 'hidden';
+        bar.style.padding = '0';
+        setTimeout(function() {
+            bar.style.display = 'none';
+            updateOffsets();
+        }, 300);
+        if (cookieDuration > 0) {
+            setCookie('panth_nbar_' + barId, 'dismissed', cookieDuration);
+        } else {
+            try {
+                sessionStorage.setItem('panth_nbar_' + barId, 'dismissed');
+            } catch (e) {}
+        }
+    }
+
+    function stackBars(selector, edge) {
+        var stack = 0;
+        document.querySelectorAll(selector).forEach(function(bar) {
+            bar.style[edge] = '';
+            var style = getComputedStyle(bar);
+            if (style.display === 'none' || bar.offsetHeight === 0) {
+                return;
+            }
+            var base = parseFloat(style[edge]) || 0;
+            if (stack > 0) {
+                bar.style[edge] = (stack + base) + 'px';
+            }
+            stack = stack + base + bar.offsetHeight;
+        });
+        return Math.round(stack);
+    }
+
+    function updateOffsets() {
+        var root = document.documentElement;
+        var bottom = stackBars('.panth-nbar-pos-bottom_fixed, .panth-nbar-pos-bottom_floating', 'bottom');
+        var top = stackBars('.panth-nbar-pos-top_fixed', 'top');
+        root.style.setProperty('--panth-bottom-bar-offset', bottom + 'px');
+        root.classList.toggle('panth-has-bottom-bar', bottom > 0);
+        root.style.setProperty('--panth-top-bar-offset', top + 'px');
+        root.classList.toggle('panth-has-top-bar', top > 0);
+    }
+
+    function initBars() {
+        var uaMobile = /Mobile|Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent || '');
+        var narrowQuery = window.matchMedia ? window.matchMedia('(max-width: 767px)') : null;
+        var isMobile = uaMobile || !!(narrowQuery && narrowQuery.matches);
+        if (narrowQuery && !uaMobile) {
+            var swapTexts = function() {
+                document.querySelectorAll('.panth-nbar').forEach(function(b) {
+                    var d = b.querySelector('.panth-nbar-text-desktop');
+                    var m = b.querySelector('.panth-nbar-text-mobile');
+                    if (d && m) {
+                        d.style.display = narrowQuery.matches ? 'none' : '';
+                        m.style.display = narrowQuery.matches ? '' : 'none';
+                    }
+                });
+            };
+            if (narrowQuery.addEventListener) {
+                narrowQuery.addEventListener('change', swapTexts);
+            } else if (narrowQuery.addListener) {
+                narrowQuery.addListener(swapTexts);
+            }
+        }
+        var nowTs = Date.now();
+        var shown = 0;
+        document.querySelectorAll('.panth-nbar').forEach(function(bar) {
+            var barId = bar.dataset.barId;
+            var dismissible = bar.dataset.dismissible === '1';
+            var cookieDuration = parseInt(bar.dataset.cookieDuration || '7', 10);
+            var autoClose = parseInt(bar.dataset.autoClose || '0', 10);
+            var animation = bar.dataset.animation || 'slide_down';
+            var dateFrom = parseInt(bar.dataset.dateFrom || '0', 10);
+            var dateTo = parseInt(bar.dataset.dateTo || '0', 10);
+            var maxBars = parseInt(bar.dataset.maxBars || '0', 10);
+
+            if ((dateFrom && nowTs < dateFrom) || (dateTo && nowTs > dateTo)
+                || (isMobile && bar.dataset.showMobile === '0')
+                || (!isMobile && bar.dataset.showDesktop === '0')
+                || (maxBars > 0 && shown >= maxBars)) {
+                bar.style.display = 'none';
+                return;
+            }
+            if (dismissible) {
+                if (getCookie('panth_nbar_' + barId) === 'dismissed') {
+                    bar.style.display = 'none';
+                    return;
+                }
+                try {
+                    if (cookieDuration === 0 && sessionStorage.getItem('panth_nbar_' + barId) === 'dismissed') {
+                        bar.style.display = 'none';
+                        return;
+                    }
+                } catch (e) {}
+            }
+
+            shown++;
+            bar.style.display = '';
+
+            var desktopText = bar.querySelector('.panth-nbar-text-desktop');
+            var mobileText = bar.querySelector('.panth-nbar-text-mobile');
+            if (desktopText && mobileText) {
+                desktopText.style.display = isMobile ? 'none' : '';
+                mobileText.style.display = isMobile ? '' : 'none';
+            }
+
+            // Show with animation
+            if (animation === 'slide_down') {
+                bar.style.transform = (bar.dataset.position || '').indexOf('bottom') === 0 ? 'translateY(100%)' : 'translateY(-100%)';
+                bar.style.transition = 'transform 0.4s ease';
+                requestAnimationFrame(function() {
+                    requestAnimationFrame(function() {
+                        bar.style.transform = 'translateY(0)';
+                    });
+                });
+            } else if (animation === 'fade_in') {
+                bar.style.opacity = '0';
+                bar.style.transition = 'opacity 0.5s ease';
+                requestAnimationFrame(function() {
+                    requestAnimationFrame(function() {
+                        bar.style.opacity = '1';
+                    });
+                });
+            }
+
+            // Close button
+            var closeBtn = bar.querySelector('.panth-nbar-close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    dismissBar(bar, cookieDuration, barId);
+                });
+            }
+
+            // CTA with # url acts as dismiss on click
+            var ctaBtn = bar.querySelector('.panth-nbar-cta[href="#"]');
+            if (ctaBtn && dismissible) {
+                ctaBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    dismissBar(bar, cookieDuration, barId);
+                });
+            }
+
+            // Auto-close
+            if (autoClose > 0) {
+                setTimeout(function() {
+                    dismissBar(bar, dismissible ? cookieDuration : -1, barId);
+                }, autoClose * 1000);
+            }
+        });
+
+        // Countdown timers
+        document.querySelectorAll('.panth-nbar-countdown').forEach(function(el) {
+            var endDate = new Date(el.dataset.endDate).getTime();
+            var expiredText = el.dataset.expiredText || '';
+            var timer = null;
+
+            function update() {
+                var now = new Date().getTime();
+                var diff = endDate - now;
+                if (isNaN(diff) || diff <= 0) {
+                    var label = el.previousElementSibling;
+                    if (label && label.classList.contains('panth-nbar-cd-label')) {
+                        label.style.display = 'none';
+                    }
+                    el.textContent = expiredText;
+                    var owner = el.closest('.panth-nbar');
+                    if (expiredText === '' && owner) {
+                        owner.style.display = 'none';
+                        updateOffsets();
+                    }
+                    if (timer) {
+                        clearInterval(timer);
+                    }
+                    return false;
+                }
+                var days = Math.floor(diff / 86400000);
+                var hours = Math.floor((diff % 86400000) / 3600000);
+                var mins = Math.floor((diff % 3600000) / 60000);
+                var secs = Math.floor((diff % 60000) / 1000);
+
+                el.innerHTML = (days > 0 ? '<span class="panth-nbar-cd-unit">' + days + '<small>d</small></span> ' : '')
+                    + '<span class="panth-nbar-cd-unit">' + String(hours).padStart(2, '0') + '<small>h</small></span> '
+                    + '<span class="panth-nbar-cd-unit">' + String(mins).padStart(2, '0') + '<small>m</small></span> '
+                    + '<span class="panth-nbar-cd-unit">' + String(secs).padStart(2, '0') + '<small>s</small></span>';
+                return true;
+            }
+            if (update()) {
+                timer = setInterval(update, 1000);
+            }
+        });
+    }
+
+    initBars();
+    updateOffsets();
+    window.addEventListener('resize', updateOffsets);
+    window.addEventListener('load', updateOffsets);
+    setTimeout(updateOffsets, 600);
+    if (window.ResizeObserver) {
+        var observer = new ResizeObserver(updateOffsets);
+        document.querySelectorAll('.panth-nbar-pos-bottom_fixed, .panth-nbar-pos-bottom_floating, .panth-nbar-pos-top_fixed').forEach(function(bar) {
+            observer.observe(bar);
+        });
+    }
+})();
+</script>

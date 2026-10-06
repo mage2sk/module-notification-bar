@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!-- Register with Panth Core ThemeConfig -->
+    <type name="Panth\Core\ViewModel\ThemeConfig">
+        <arguments>
+            <argument name="registeredModules" xsi:type="array">
+                <item name="Panth_NotificationBar" xsi:type="string">Panth_NotificationBar</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- Grid Collections -->
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="panth_notification_bar_listing_data_source" xsi:type="string">Panth\NotificationBar\Model\ResourceModel\Bar\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- CLI Commands -->
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="panth_notificationbar_install_sample_data" xsi:type="object">Panth\NotificationBar\Console\Command\InstallSampleDataCommand</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Panth\NotificationBar\Ui\BarGridFulltextFilter" type="Panth\NotificationBar\Ui\Component\Listing\LikeFulltextFilter">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="name" xsi:type="string">main_table.name</item>
+                <item name="cta_text" xsi:type="string">main_table.cta_text</item>
+                <item name="content" xsi:type="string">main_table.content</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Panth\NotificationBar\Ui\BarGridFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Panth\NotificationBar\Ui\BarGridFulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Panth\NotificationBar\Ui\BarGridReporting" type="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting">
+        <arguments>
+            <argument name="filterPool" xsi:type="object">Panth\NotificationBar\Ui\BarGridFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Panth\NotificationBar\Ui\BarGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="reporting" xsi:type="object">Panth\NotificationBar\Ui\BarGridReporting</argument>
+        </arguments>
+    </virtualType>
+</config>

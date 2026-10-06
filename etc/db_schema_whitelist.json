@@ -1,0 +1,62 @@
+{
+    "panth_notification_bar": {
+        "column": {
+            "bar_id": true,
+            "name": true,
+            "is_active": true,
+            "bar_type": true,
+            "position": true,
+            "sort_order": true,
+            "content": true,
+            "background_type": true,
+            "background_color": true,
+            "background_gradient": true,
+            "background_image": true,
+            "text_color": true,
+            "font_size": true,
+            "bar_height": true,
+            "bar_padding": true,
+            "icon": true,
+            "custom_css": true,
+            "cta_enabled": true,
+            "cta_text": true,
+            "cta_url": true,
+            "cta_open_new_tab": true,
+            "cta_bg_color": true,
+            "cta_text_color": true,
+            "countdown_enabled": true,
+            "countdown_end_date": true,
+            "countdown_label": true,
+            "countdown_expired_text": true,
+            "is_dismissible": true,
+            "cookie_duration": true,
+            "animation": true,
+            "auto_close_seconds": true,
+            "date_from": true,
+            "date_to": true,
+            "store_ids": true,
+            "customer_groups": true,
+            "page_targeting": true,
+            "target_urls": true,
+            "target_page_types": true,
+            "target_countries": true,
+            "target_url_params": true,
+            "show_on_mobile": true,
+            "show_on_desktop": true,
+            "mobile_content": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        },
+        "index": {
+            "PANTH_NOTIFICATION_BAR_IS_ACTIVE": true,
+            "PANTH_NOTIFICATION_BAR_SORT_ORDER": true,
+            "PANTH_NOTIFICATION_BAR_POSITION": true,
+            "PANTH_NOTIFICATION_BAR_DATE_FROM": true,
+            "PANTH_NOTIFICATION_BAR_DATE_TO": true,
+            "PANTH_NOTIFICATION_BAR_BAR_TYPE": true
+        }
+    }
+}
