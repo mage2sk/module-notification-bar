@@ -196,7 +196,7 @@ The table `panth_notification_bar` and the `panth_notification_bar/*` rows in `c
 
 ## License
 
-Commercial software license. See [LICENSE.txt](LICENSE.txt) in this repository.
+Free and open source under the MIT License. See [LICENSE.txt](LICENSE.txt).
 
 ## Changelog
 
